@@ -1,0 +1,1 @@
+# settings __init__.py — выбор окружения через DJANGO_SETTINGS_MODULE

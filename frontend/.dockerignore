@@ -1,0 +1,13 @@
+.git
+.gitignore
+.env
+.env.local
+node_modules/
+.next/
+out/
+.venv/
+.vscode/
+.idea/
+*.md
+Dockerfile
+.dockerignore

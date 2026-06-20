@@ -1,0 +1,17 @@
+.git
+.gitignore
+.env
+.env.example
+*.pyc
+__pycache__/
+*.pyo
+*.sqlite3
+staticfiles/
+media/
+.venv/
+venv/
+.vscode/
+.idea/
+*.md
+Dockerfile
+.dockerignore

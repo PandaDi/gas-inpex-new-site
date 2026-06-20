@@ -1,0 +1,64 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Gas Inpex{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+        <img src="{% static 'admin/img/gas-inpex-logo.svg' %}" alt="Gas Inpex" height="40" style="filter:brightness(0) invert(1);">
+        <span style="font-size:1.2rem;font-weight:700;color:#fff;">Gas Inpex</span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+<style>
+    :root {
+        --primary: #1a56db;
+        --secondary: #0f3a8e;
+        --accent: #f59e0b;
+        --primary-fg: #fff;
+        --body-fg: #333;
+        --body-bg: #f3f4f6;
+        --body-quiet-color: #666;
+        --body-loud-color: #000;
+        --header-color: #fff;
+        --header-branding-color: var(--primary-fg);
+        --header-bg: var(--secondary);
+        --header-link-color: var(--primary-fg);
+        --breadcrumbs-fg: #f59e0b;
+        --breadcrumbs-link-fg: #fff;
+        --breadcrumbs-bg: var(--primary);
+        --link-fg: var(--primary);
+        --link-hover-color: #1e40af;
+        --link-selected-fg: #1e40af;
+        --hairline-color: #e5e7eb;
+        --border-color: #d1d5db;
+        --error-fg: #dc2626;
+        --message-success-bg: #d1fae5;
+        --message-warning-bg: #fef3c7;
+        --message-error-bg: #fde8e8;
+        --darkened-bg: #e5e7eb;
+        --selected-bg: #dbeafe;
+        --selected-row: #dbeafe;
+        --button-fg: #fff;
+        --button-bg: var(--primary);
+        --button-hover-bg: #1e40af;
+        --default-button-bg: var(--secondary);
+        --default-button-hover-bg: #0f3a8e;
+        --close-button-bg: #6b7280;
+        --close-button-hover-bg: #4b5563;
+        --delete-button-bg: #dc2626;
+        --delete-button-hover-bg: #b91c1c;
+        --object-tools-bg: var(--primary);
+        --object-tools-hover-bg: #1e40af;
+    }
+    #header { background: linear-gradient(135deg, #0f3a8e 0%, #1a56db 100%); }
+    form table tbody tr:nth-child(odd) { background: #f9fafb; }
+    .module caption { background: var(--secondary); }
+    .button, input[type=submit], input[type=button], .submit-row input { border-radius: 6px; }
+    #changelist-filter li.selected a { color: var(--primary); }
+    .dashboard #content { width: auto; }
+</style>
+{% endblock %}
