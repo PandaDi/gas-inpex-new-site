@@ -1,6 +1,6 @@
 "use client";
 
-import type { Metadata } from "next";
+import { useState } from "react";
 import { COMPANY } from "@/lib/constants";
 import {
   FaMapMarkerAlt,
@@ -8,10 +8,15 @@ import {
   FaEnvelope,
   FaWhatsapp,
   FaClock,
+  FaSpinner,
+  FaCheckCircle,
+  FaExclamationCircle,
 } from "react-icons/fa";
 
 export default function ContactsPage() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const name = (form.elements.namedItem("name") as HTMLInputElement).value;
@@ -19,8 +24,22 @@ export default function ContactsPage() {
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
     const message = (form.elements.namedItem("message") as HTMLTextAreaElement).value;
 
-    const whatsappText = `Здравствуйте! Меня зовут ${name}.%0AТелефон: ${phone}%0AEmail: ${email}%0A%0A${message}`;
-    window.open(`https://wa.me/${COMPANY.whatsapp}?text=${whatsappText}`, "_blank");
+    setStatus("sending");
+
+    try {
+      await fetch("http://localhost:8000/api/contacts/requests/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, email, message }),
+      });
+      setStatus("success");
+
+      // Also open WhatsApp
+      const whatsappText = `Здравствуйте! Меня зовут ${name}.%0AТелефон: ${phone}%0AEmail: ${email}%0A%0A${message}`;
+      window.open(`https://wa.me/${COMPANY.whatsapp}?text=${whatsappText}`, "_blank");
+    } catch {
+      setStatus("error");
+    }
   };
 
   const contactItems = [
@@ -131,11 +150,28 @@ export default function ContactsPage() {
                     placeholder="Опишите ваш вопрос или задачу..."
                   />
                 </div>
+
+                {status === "success" && (
+                  <div className="flex items-center gap-2 p-3 bg-green-50 text-green-700 text-sm rounded-lg border border-green-200">
+                    <FaCheckCircle /> Заявка успешно отправлена!
+                  </div>
+                )}
+                {status === "error" && (
+                  <div className="flex items-center gap-2 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-200">
+                    <FaExclamationCircle /> Ошибка отправки. Попробуйте ещё раз.
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full px-6 py-3.5 bg-red-brand text-white font-semibold rounded-lg hover:bg-red-dark transition shadow-lg shadow-red-500/20 text-sm"
+                  disabled={status === "sending"}
+                  className="w-full px-6 py-3.5 bg-red-brand text-white font-semibold rounded-lg hover:bg-red-dark transition shadow-lg shadow-red-500/20 text-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  <FaWhatsapp className="inline mr-2" />Отправить заявку в WhatsApp
+                  {status === "sending" ? (
+                    <><FaSpinner className="animate-spin" /> Отправка...</>
+                  ) : (
+                    <><FaWhatsapp className="inline mr-1" /> Отправить заявку в WhatsApp</>
+                  )}
                 </button>
                 <p className="text-xs text-gray-500 text-center">
                   После нажатия откроется WhatsApp с подготовленным текстом заявки.

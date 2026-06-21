@@ -1,96 +1,49 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  FaCogs,
-  FaCar,
-  FaTractor,
-  FaFire,
-  FaIndustry,
-  FaMicrochip,
-  FaWifi,
-  FaWater,
   FaHandshake,
 } from "react-icons/fa";
 
-export const metadata: Metadata = {
-  title: "Партнеры и клиенты — Gas Inpex",
-  description:
-    "Партнеры и клиенты ТОО «Gas Inpex»: Hitachi, Toyota Tsusho, Caterpillar, Ariston, Qarmet, Siemens, Baxi, Vaillant, Grundfos, Kiturami.",
-};
-
-const partners = [
-  {
-    icon: FaCogs,
-    name: "Hitachi",
-    desc: "Партнёр по поставке промышленных контроллеров и средств автоматизации. Совместная реализация проектов АСУ ТП для горнорудной промышленности.",
-  },
-  {
-    icon: FaCar,
-    name: "Toyota Tsusho",
-    desc: "Стратегический партнёр по логистике и поставкам импортного газового оборудования. Обеспечение прямых поставок из Японии и Европы.",
-  },
-  {
-    icon: FaTractor,
-    name: "Caterpillar",
-    desc: "Официальный партнёр по поставке газопоршневых установок и генераторов. Реализация проектов когенерации и автономного энергоснабжения.",
-  },
-  {
-    icon: FaFire,
-    name: "Ariston",
-    desc: "Официальный дилер по бытовым газовым котлам и водонагревателям. Сертифицированный сервисный центр по гарантийному и послегарантийному обслуживанию.",
-  },
-  {
-    icon: FaIndustry,
-    name: "Qarmet",
-    desc: "Ключевой заказчик — реализация проектов автоматизации котельных и газоснабжения на металлургическом комбинате в Темиртау.",
-  },
-  {
-    icon: FaMicrochip,
-    name: "Siemens",
-    desc: "Технологический партнёр по ПЛК, SCADA-системам и промышленным коммуникациям. Использование оборудования Siemens во всех проектах автоматизации.",
-  },
-  {
-    icon: FaCogs,
-    name: "Baxi",
-    desc: "Официальный дистрибьютор газовых котлов Baxi в Казахстане. Сертифицированный монтаж и сервисное обслуживание всей линейки оборудования.",
-  },
-  {
-    icon: FaWifi,
-    name: "Vaillant",
-    desc: "Партнёрство в области премиальных систем отопления и горячего водоснабжения. Реализация объектов индивидуального и многоквартирного жилья.",
-  },
-  {
-    icon: FaWater,
-    name: "Grundfos",
-    desc: "Официальный партнёр по насосному оборудованию. Применение циркуляционных и повысительных насосов в системах отопления и водоснабжения.",
-  },
-];
-
-const testimonials = [
-  {
-    initials: "АК",
-    name: "А. Каримов",
-    role: "Главный инженер, ТОО «Qarmet»",
-    text: "Сотрудничаем с Gas Inpex более 5 лет. Профессиональный подход, качественное выполнение работ, строгое соблюдение сроков. Особо хочу отметить компетентность инженеров при внедрении АСУ ТП.",
-    bgColor: "bg-navy",
-  },
-  {
-    initials: "СМ",
-    name: "С. Муратов",
-    role: "Технический директор, ТОО «KazMinerals»",
-    text: "Компания Gas Inpex выполнила автоматизацию нашей производственной линии на высшем уровне. Система работает без сбоев уже 2 года. Очень довольны качеством и надёжностью.",
-    bgColor: "bg-red-brand",
-  },
-  {
-    initials: "ЕК",
-    name: "Е. Калиев",
-    role: "Частный заказчик, г. Темиртау",
-    text: "Заказывали систему \"Умный дом\" для коттеджа. Всё работает отлично: климат-контроль, освещение, безопасность. Управляю домом со смартфона. Рекомендую!",
-    bgColor: "bg-navy",
-  },
-];
-
 export default function PartnersPage() {
+  const [partners, setPartners] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/partners/")
+      .then((r) => r.json())
+      .then((data) => {
+        setPartners(data.results || data || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const testimonials = [
+    {
+      initials: "АК",
+      name: "А. Каримов",
+      role: "Главный инженер, ТОО «Qarmet»",
+      text: "Сотрудничаем с Gas Inpex более 5 лет. Профессиональный подход, качественное выполнение работ, строгое соблюдение сроков. Особо хочу отметить компетентность инженеров при внедрении АСУ ТП.",
+      bgColor: "bg-navy",
+    },
+    {
+      initials: "СМ",
+      name: "С. Муратов",
+      role: "Технический директор, ТОО «KazMinerals»",
+      text: "Компания Gas Inpex выполнила автоматизацию нашей производственной линии на высшем уровне. Система работает без сбоев уже 2 года. Очень довольны качеством и надёжностью.",
+      bgColor: "bg-red-brand",
+    },
+    {
+      initials: "ЕК",
+      name: "Е. Калиев",
+      role: "Частный заказчик, г. Темиртау",
+      text: "Заказывали систему \"Умный дом\" для коттеджа. Всё работает отлично: климат-контроль, освещение, безопасность. Управляю домом со смартфона. Рекомендую!",
+      bgColor: "bg-navy",
+    },
+  ];
+
   return (
     <>
       {/* HERO */}
@@ -107,20 +60,34 @@ export default function PartnersPage() {
       {/* PARTNERS GRID */}
       <section className="py-16 sm:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {partners.map((partner, i) => (
-              <div
-                key={i}
-                className="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-200 hover:border-red-brand/30 transition-all hover:shadow-lg text-center"
-              >
-                <div className="w-20 h-20 bg-navy/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <partner.icon className="text-4xl text-navy" />
+          {loading ? (
+            <div className="text-center py-20">Загрузка...</div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {partners.map((partner: any, i: number) => (
+                <div
+                  key={partner.id || i}
+                  className="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-200 hover:border-red-brand/30 transition-all hover:shadow-lg text-center"
+                >
+                  <div className="w-20 h-20 bg-navy/5 rounded-2xl flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                    {partner.logo ? (
+                      <img
+                        src={partner.logo}
+                        alt={partner.name}
+                        className="w-full h-full object-contain p-2"
+                      />
+                    ) : (
+                      <span className="text-4xl text-navy font-bold">
+                        {partner.name ? partner.name.charAt(0).toUpperCase() : "?"}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-lg font-bold text-navy mb-2">{partner.name}</h3>
+                  <p className="text-sm text-gray-500">{partner.description || ""}</p>
                 </div>
-                <h3 className="text-lg font-bold text-navy mb-2">{partner.name}</h3>
-                <p className="text-sm text-gray-500">{partner.desc}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

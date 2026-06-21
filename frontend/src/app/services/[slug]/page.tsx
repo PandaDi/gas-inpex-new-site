@@ -1,158 +1,65 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { FaArrowLeft, FaCheck } from "react-icons/fa";
 import { COMPANY } from "@/lib/constants";
 
-interface Props {
-  params: Promise<{ slug: string }>;
-}
+export default function ServiceDetailPage() {
+  const params = useParams();
+  const slug = params?.slug as string;
 
-const serviceDetails: Record<string, { title: string; description: string; features: string[]; content: string }> = {
-  "postavka-promyshlennogo-oborudovaniya": {
-    title: "Поставка промышленного газового оборудования",
-    description:
-      "Поставка газового оборудования от ведущих мировых производителей для промышленных предприятий.",
-    features: [
-      "Газовые котлы и горелки",
-      "Газораспределительные пункты",
-      "Запорно-регулирующая арматура",
-      "Системы газового контроля",
-      "Гарантия на всё оборудование",
-      "Доставка по всему Казахстану",
-    ],
-    content:
-      "ТОО «Gas Inpex» осуществляет поставку промышленного газового оборудования от ведущих мировых и отечественных производителей. Мы предлагаем широкий ассортимент продукции для газоснабжения промышленных объектов, котельных, газораспределительных систем. Все поставляемое оборудование имеет необходимые сертификаты соответствия и паспорта качества.",
-  },
-  "avtomatizatsiya-asu-tp": {
-    title: "Автоматизация технологических процессов (АСУ ТП)",
-    description:
-      "Разработка и внедрение систем автоматизации технологических процессов на базе современных контроллеров и SCADA-систем.",
-    features: [
-      "Разработка проектной документации",
-      "Программирование ПЛК и SCADA",
-      "Монтаж щитов автоматизации",
-      "Интеграция с существующими системами",
-      "Диспетчеризация и удалённый мониторинг",
-      "Гарантийное обслуживание",
-    ],
-    content:
-      "Мы разрабатываем и внедряем системы автоматизации технологических процессов (АСУ ТП) любой сложности. Используем современные программируемые логические контроллеры (ПЛК) ведущих производителей, SCADA-системы для визуализации и управления. Наши специалисты имеют многолетний опыт в автоматизации газораспределения, котельных, промышленных объектов.",
-  },
-  "montazh-i-puskonaladka": {
-    title: "Монтаж и пусконаладка",
-    description:
-      "Профессиональный монтаж газового и котельного оборудования, пусконаладочные работы, ввод в эксплуатацию.",
-    features: [
-      "Монтаж газового оборудования",
-      "Монтаж котельных установок",
-      "Пусконаладочные работы",
-      "Настройка автоматики",
-      "Проверка систем безопасности",
-      "Ввод в эксплуатацию",
-    ],
-    content:
-      "Наши специалисты выполняют монтаж и пусконаладку газового и котельного оборудования любой сложности. Мы работаем в строгом соответствии с техническими регламентами и нормами безопасности. После завершения работ проводим комплексную проверку всех систем и передаём объект заказчику с гарантийными обязательствами.",
-  },
-  "obsluzhivanie-kotelnyh": {
-    title: "Обслуживание котельных",
-    description:
-      "Техническое обслуживание и ремонт котельных установок любой сложности. Плановое и аварийное обслуживание.",
-    features: [
-      "Плановое техническое обслуживание",
-      "Аварийный ремонт",
-      "Чистка и настройка горелок",
-      "Проверка автоматики безопасности",
-      "Гидравлические испытания",
-      "Круглосуточная диспетчерская служба",
-    ],
-    content:
-      "Мы предлагаем полный комплекс услуг по техническому обслуживанию котельных и газового оборудования. Наши специалисты обеспечивают бесперебойную и безопасную работу вашего оборудования. Доступна круглосуточная диспетчерская служба для оперативного реагирования на аварийные ситуации.",
-  },
-  "bytovye-kotly": {
-    title: "Продажа и установка бытовых газовых котлов",
-    description:
-      "Продажа и установка бытовых газовых котлов, систем отопления и горячего водоснабжения для частных домов.",
-    features: [
-      "Газовые котлы ведущих брендов",
-      "Системы отопления и ГВС",
-      "Профессиональная установка",
-      "Настройка режимов работы",
-      "Гарантийное обслуживание",
-      "Консультации по выбору",
-    ],
-    content:
-      "Продажа и установка бытовых газовых котлов для частных домов и квартир. Мы предлагаем оборудование ведущих производителей, обеспечиваем профессиональный монтаж и настройку. Поможем подобрать оптимальное решение для вашего дома с учётом площади, теплопотерь и ваших потребностей.",
-  },
-  "umnyj-dom": {
-    title: "Системы управления зданием (Умный дом)",
-    description:
-      "Проектирование и монтаж систем управления зданием (BMS): отопление, освещение, вентиляция, безопасность.",
-    features: [
-      "Проектирование системы",
-      "Автоматизация отопления и климата",
-      "Управление освещением",
-      "Системы безопасности",
-      "Учёт энергоресурсов",
-      "Удалённое управление",
-    ],
-    content:
-      "Внедряем системы управления зданием (BMS), объединяющие в единую сеть отопление, вентиляцию, кондиционирование, освещение и безопасность. Управление осуществляется через единый интерфейс с возможностью удалённого доступа через смартфон или ПК. Экономия энергоресурсов достигает 30%.",
-  },
-  "kipia": {
-    title: "КИПиА — Контрольно-измерительные приборы и автоматика",
-    description:
-      "Поставка и обслуживание контрольно-измерительных приборов и автоматики для промышленных объектов.",
-    features: [
-      "Датчики давления, температуры, расхода",
-      "Расходомеры и счётчики газа",
-      "Сигнализаторы загазованности",
-      "Регуляторы давления",
-      "Поверка и калибровка приборов",
-      "Ремонт КИПиА",
-    ],
-    content:
-      "Поставка, монтаж и обслуживание контрольно-измерительных приборов и автоматики для промышленных объектов. В нашем ассортименте датчики, расходомеры, сигнализаторы загазованности, регуляторы и другая контрольно-измерительная аппаратура. Проводим поверку, калибровку и ремонт приборов КИПиА.",
-  },
-  "energoaudit": {
-    title: "Энергоаудит и проектирование",
-    description:
-      "Энергетическое обследование предприятий, разработка проектной документации по газоснабжению и автоматизации.",
-    features: [
-      "Энергетическое обследование",
-      "Энергетический паспорт",
-      "Проекты газоснабжения",
-      "Проекты автоматизации",
-      "Технические условия",
-      "Сметная документация",
-    ],
-    content:
-      "Проводим энергетическое обследование предприятий, разрабатываем энергетические паспорта, проекты газоснабжения и автоматизации. Наши проектные решения соответствуют действующим нормативам и позволяют оптимизировать энергопотребление вашего предприятия.",
-  },
-};
+  const [service, setService] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const service = serviceDetails[slug];
-  if (!service) return { title: "Услуга не найдена" };
-  return {
-    title: service.title,
-    description: service.description,
-  };
-}
+  useEffect(() => {
+    if (!slug) return;
+    fetch(`http://localhost:8000/api/services/${slug}/`)
+      .then((r) => {
+        if (!r.ok) throw new Error("Not found");
+        return r.json();
+      })
+      .then((data) => {
+        setService(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [slug]);
 
-export default async function ServiceDetailPage({ params }: Props) {
-  const { slug } = await params;
-  const service = serviceDetails[slug];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center py-20">Загрузка...</div>
+      </div>
+    );
+  }
 
   if (!service) {
-    notFound();
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center">
+        <h1 className="text-3xl font-bold text-navy mb-4">Услуга не найдена</h1>
+        <Link
+          href="/services"
+          className="inline-flex items-center gap-2 text-red-brand hover:text-red-dark font-semibold"
+        >
+          <FaArrowLeft size={12} /> Назад к услугам
+        </Link>
+      </div>
+    );
   }
+
+  const features = service.full_description
+    ? service.full_description
+        .split("\n")
+        .map((s: string) => s.trim())
+        .filter(Boolean)
+    : [];
 
   return (
     <div className="min-h-screen bg-white">
       {/* Breadcrumb */}
-      <div className="bg-primary text-white py-10">
+      <div className="bg-navy text-white py-10">
         <div className="max-w-7xl mx-auto px-4">
           <Link
             href="/services"
@@ -166,42 +73,46 @@ export default async function ServiceDetailPage({ params }: Props) {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <p className="text-lg text-gray-dark/80 leading-relaxed mb-8">
-          {service.content}
+        <p className="text-lg text-gray-600 leading-relaxed mb-8">
+          {service.short_description || service.full_description || ""}
         </p>
 
-        <h2 className="text-xl font-semibold text-primary mb-4">
-          Что мы предлагаем
-        </h2>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">
-          {service.features.map((feature) => (
-            <li
-              key={feature}
-              className="flex items-start gap-2 text-gray-dark/80"
-            >
-              <FaCheck size={14} className="text-accent mt-0.5 shrink-0" />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
+        {features.length > 0 && (
+          <>
+            <h2 className="text-xl font-semibold text-navy mb-4">
+              Что мы предлагаем
+            </h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">
+              {features.map((feature: string, i: number) => (
+                <li
+                  key={i}
+                  className="flex items-start gap-2 text-gray-600"
+                >
+                  <FaCheck size={14} className="text-red-brand mt-0.5 shrink-0" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
 
-        <div className="bg-gray-light rounded-xl p-8 text-center">
-          <h3 className="text-lg font-semibold text-primary mb-2">
+        <div className="bg-gray-50 rounded-xl p-8 text-center">
+          <h3 className="text-lg font-semibold text-navy mb-2">
             Хотите заказать услугу?
           </h3>
-          <p className="text-sm text-gray-dark/70 mb-4">
+          <p className="text-sm text-gray-500 mb-4">
             Свяжитесь с нами для консультации и расчёта стоимости
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
               href={`tel:${COMPANY.phoneRaw}`}
-              className="inline-flex items-center gap-2 bg-accent text-white px-6 py-3 rounded-lg font-semibold hover:bg-accent-dark transition-colors"
+              className="inline-flex items-center gap-2 bg-red-brand text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-dark transition-colors"
             >
               {COMPANY.phone}
             </a>
             <Link
               href="/contacts"
-              className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
+              className="inline-flex items-center gap-2 bg-navy text-white px-6 py-3 rounded-lg font-semibold hover:bg-navy/90 transition-colors"
             >
               Форма обратной связи
             </Link>
