@@ -83,6 +83,9 @@ def optimize_image(image_file, quality=85, max_width=1920, keep_format=False):
 
     # Генерируем имя файла
     base_name = os.path.splitext(os.path.basename(image_file.name))[0]
+    # Удаляем мусорные суффиксы Django (типа _fPy4PIq_DR3Wp16_AjTPlIk)
+    import re
+    base_name = re.sub(r'_[A-Za-z0-9]{5,}(_[A-Za-z0-9]{5,})*$', '', base_name)
     # Очищаем от спецсимволов
     clean_name = ''.join(c if c.isalnum() or c in '._-' else '_' for c in base_name)
     filename = f'{clean_name}{ext}'
