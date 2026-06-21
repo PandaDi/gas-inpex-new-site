@@ -3,10 +3,11 @@ ViewSets для API приложения Pages — только чтение (Re
 """
 
 from rest_framework import viewsets
-from .models import Service, Project, Partner, Certificate
+from .models import Service, Project, Partner, Certificate, HeroSlide
 from .serializers import (
     ServiceSerializer, ProjectSerializer,
-    PartnerSerializer, CertificateSerializer
+    PartnerSerializer, CertificateSerializer,
+    HeroSlideSerializer
 )
 
 
@@ -34,3 +35,9 @@ class CertificateViewSet(viewsets.ReadOnlyModelViewSet):
     """Просмотр сертификатов."""
     queryset = Certificate.objects.filter(is_active=True)
     serializer_class = CertificateSerializer
+
+
+class HeroSlideViewSet(viewsets.ReadOnlyModelViewSet):
+    """Просмотр слайдов главного баннера."""
+    queryset = HeroSlide.objects.filter(is_active=True)
+    serializer_class = HeroSlideSerializer
