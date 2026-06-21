@@ -1,99 +1,185 @@
 import type { Metadata } from "next";
-import ServiceCard from "@/components/ui/ServiceCard";
-import { FaIndustry, FaTools, FaHome, FaCogs, FaFire, FaWifi, FaThermometerHalf, FaBoxes } from "react-icons/fa";
-import type { IconType } from "react-icons";
+import Link from "next/link";
+import {
+  FaRobot,
+  FaCheckCircle,
+  FaTruck,
+  FaHome,
+  FaHeadset,
+  FaArrowRight,
+  FaStar,
+  FaIndustry,
+  FaFire,
+  FaThermometerHalf,
+  FaCubes,
+} from "react-icons/fa";
 
 export const metadata: Metadata = {
-  title: "Услуги",
-  description: "Услуги компании Gas Inpex — инжиниринг, монтаж, автоматизация и сервисное обслуживание газового оборудования в г. Темиртау.",
+  title: "Услуги — Gas Inpex",
+  description:
+    "Полный перечень услуг ТОО «Gas Inpex»: инжиниринг, автоматизация АСУ ТП, поставка газового оборудования, проектирование Умный дом, СМР и ПНР.",
 };
-
-interface ServiceItem {
-  icon: IconType;
-  title: string;
-  description: string;
-  slug: string;
-}
-
-const services: ServiceItem[] = [
-  {
-    icon: FaIndustry,
-    title: "Поставка промышленного газового оборудования",
-    description:
-      "Поставка газового оборудования от ведущих мировых производителей для промышленных предприятий. Включает газовые котлы, горелки, газораспределительные пункты.",
-    slug: "postavka-promyshlennogo-oborudovaniya",
-  },
-  {
-    icon: FaCogs,
-    title: "Автоматизация (АСУ ТП)",
-    description:
-      "Разработка и внедрение систем автоматизации технологических процессов на базе современных контроллеров и SCADA-систем.",
-    slug: "avtomatizatsiya-asu-tp",
-  },
-  {
-    icon: FaTools,
-    title: "Монтаж и пусконаладка",
-    description:
-      "Профессиональный монтаж газового и котельного оборудования, пусконаладочные работы, ввод в эксплуатацию.",
-    slug: "montazh-i-puskonaladka",
-  },
-  {
-    icon: FaHome,
-    title: "Обслуживание котельных",
-    description:
-      "Техническое обслуживание и ремонт котельных установок любой сложности. Плановое и аварийное обслуживание.",
-    slug: "obsluzhivanie-kotelnyh",
-  },
-  {
-    icon: FaFire,
-    title: "Бытовые котлы и отопление",
-    description:
-      "Продажа и установка бытовых газовых котлов, систем отопления и горячего водоснабжения для частных домов.",
-    slug: "bytovye-kotly",
-  },
-  {
-    icon: FaWifi,
-    title: "Умный дом (BMS)",
-    description:
-      "Проектирование и монтаж систем управления зданием (умный дом): отопление, освещение, вентиляция, безопасность.",
-    slug: "umnyj-dom",
-  },
-  {
-    icon: FaThermometerHalf,
-    title: "КИПиА",
-    description:
-      "Поставка и обслуживание контрольно-измерительных приборов и автоматики для промышленных объектов.",
-    slug: "kipia",
-  },
-  {
-    icon: FaBoxes,
-    title: "Энергоаудит и проектирование",
-    description:
-      "Энергетическое обследование предприятий, разработка проектной документации по газоснабжению и автоматизации.",
-    slug: "energoaudit",
-  },
-];
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-gray-light">
-      {/* Breadcrumb */}
-      <div className="bg-primary text-white py-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl font-bold">Наши услуги</h1>
-          <p className="text-white/70 mt-2">
-            Полный спектр услуг в сфере газового оборудования и автоматизации
+    <>
+      {/* PAGE HERO */}
+      <section className="bg-navy py-16 sm:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <span className="text-red-brand text-sm font-semibold uppercase tracking-widest">Направления</span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-3 mb-4">
+            Перечень предоставляемых услуг
+          </h1>
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+            Комплексные решения от проектирования до ввода в эксплуатацию и сервисного обслуживания
           </p>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {services.map((service) => (
-            <ServiceCard key={service.slug} {...service} />
-          ))}
+      {/* SERVICE: Инжиниринг и автоматизация */}
+      <section className="py-16 sm:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 mb-10">
+            <div className="w-12 h-12 bg-red-brand rounded-xl flex items-center justify-center text-white text-xl">
+              <FaRobot />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-navy">Инжиниринг и автоматизация (АСУ ТП)</h2>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-10">
+            <div className="space-y-6 text-gray-600 leading-relaxed">
+              <p>
+                <strong className="text-navy">Проектирование систем автоматизации</strong>
+                — разработка проектной и рабочей документации для систем автоматизации технологических процессов (АСУ ТП), диспетчеризации и управления производством. Наши инженеры создают технические задания, структурные и функциональные схемы, схемы внешних проводок и подключений.
+              </p>
+              <p>
+                <strong className="text-navy">Внедрение и интеграция</strong> — поставка и настройка программируемых логических контроллеров (ПЛК), промышленных компьютеров, SCADA-систем. Мы интегрируем оборудование различных производителей в единую систему управления.
+              </p>
+              <p>
+                <strong className="text-navy">Сопровождение и модернизация</strong> — техническая поддержка действующих систем, обновление программного обеспечения, замена устаревших компонентов, расширение функциональности.
+              </p>
+            </div>
+            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg border border-gray-100">
+              <h3 className="text-lg font-bold text-navy mb-4">Преимущества</h3>
+              <ul className="space-y-3">
+                {["Сокращение времени простоев на 40%", "Повышение энергоэффективности до 25%", "Совместимость с оборудованием любых брендов", "Удалённый мониторинг и управление 24/7", "Гарантия 3 года на внедрённые системы"].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <FaCheckCircle className="text-red-brand mt-1 shrink-0" />
+                    <span className="text-sm text-gray-600">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* SERVICE: Поставка газового оборудования */}
+      <section className="py-16 sm:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 mb-10">
+            <div className="w-12 h-12 bg-navy rounded-xl flex items-center justify-center text-white text-xl">
+              <FaTruck />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-navy">Поставка газового оборудования</h2>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-10">
+            <div className="space-y-6 text-gray-600 leading-relaxed">
+              <p>
+                <strong className="text-navy">Промышленное газовое оборудование</strong> — газовые горелки, клапаны, регуляторы давления, газоанализаторы, теплообменники, запорно-регулирующая арматура от ведущих мировых производителей (Siemens, Honeywell, Kromschröder, Dungs).
+              </p>
+              <p>
+                <strong className="text-navy">Бытовое газовое оборудование</strong> — настенные и напольные газовые котлы, водонагреватели, газовые плиты, системы дымоудаления. Представлены бренды Ariston, Baxi, Vaillant, Buderus.
+              </p>
+              <p>
+                <strong className="text-navy">Комплексные поставки</strong> — формирование спецификаций под конкретный проект, логистика, таможенное оформление, складская программа.
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-xl p-6 sm:p-8 shadow-lg border border-gray-100">
+              <h3 className="text-lg font-bold text-navy mb-4">Преимущества</h3>
+              <ul className="space-y-3">
+                {["Официальная дилерская поддержка", "Гарантия на всё оборудование до 5 лет", "Сертифицированное оборудование", "Складской запас в г. Темиртау", "Индивидуальные условия для постоянных клиентов"].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <FaCheckCircle className="text-red-brand mt-1 shrink-0" />
+                    <span className="text-sm text-gray-600">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICE: Умный дом */}
+      <section className="py-16 sm:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 mb-10">
+            <div className="w-12 h-12 bg-red-brand rounded-xl flex items-center justify-center text-white text-xl">
+              <FaHome />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-navy">Проектирование систем «Умный дом»</h2>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-10">
+            <div className="space-y-6 text-gray-600 leading-relaxed">
+              <p>
+                <strong className="text-navy">Автоматизация жилых помещений</strong> — комплексные решения для управления климатом, освещением, безопасностью, мультимедиа и энергопотреблением. Используем оборудование ведущих производителей: Ajax, Fibaro, Xiaomi Aqara, Schneider Electric.
+              </p>
+              <p>
+                <strong className="text-navy">Климат-контроль</strong> — автоматическое управление отоплением, кондиционированием, вентиляцией. Поддержание заданной температуры в каждом помещении с учётом времени суток и присутствия людей.
+              </p>
+              <p>
+                <strong className="text-navy">Безопасность</strong> — системы видеонаблюдения, охранной и пожарной сигнализации, датчики утечки газа, протечки воды, открытия окон и дверей. Мгновенные уведомления на смартфон.
+              </p>
+            </div>
+            <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg border border-gray-100">
+              <h3 className="text-lg font-bold text-navy mb-4">Преимущества</h3>
+              <ul className="space-y-3">
+                {["Экономия до 30% на коммунальных платежах", "Управление со смартфона из любой точки мира", "Масштабируемость — добавление новых устройств без замены контроллера", "Голосовое управление (Алиса, Siri, Google Assistant)", "Сценарии автоматизации на любой случай"].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <FaCheckCircle className="text-red-brand mt-1 shrink-0" />
+                    <span className="text-sm text-gray-600">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICE: Гарантийное и сервисное обслуживание */}
+      <section className="py-16 sm:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 mb-10">
+            <div className="w-12 h-12 bg-navy rounded-xl flex items-center justify-center text-white text-xl">
+              <FaHeadset />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-navy">Гарантийное и сервисное обслуживание</h2>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-10">
+            <div className="space-y-6 text-gray-600 leading-relaxed">
+              <p>
+                <strong className="text-navy">Гарантийное обслуживание</strong> — бесплатное устранение дефектов и неисправностей в течение гарантийного срока. Замена неисправных компонентов, настройка и калибровка оборудования.
+              </p>
+              <p>
+                <strong className="text-navy">Послегарантийный сервис</strong> — заключение договоров на регулярное техническое обслуживание, плановые осмотры, профилактические работы. Снижение риска внезапных отказов.
+              </p>
+              <p>
+                <strong className="text-navy">Аварийное реагирование</strong> — выезд инженеров в течение 2-4 часов по г. Темиртау и Караганда. Круглосуточная диспетчерская служба.
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-xl p-6 sm:p-8 shadow-lg border border-gray-100">
+              <h3 className="text-lg font-bold text-navy mb-4">Преимущества</h3>
+              <ul className="space-y-3">
+                {["Оперативный выезд 24/7", "Склад запчастей в Темиртау", "Сертифицированные инженеры", "Гарантия на ремонт до 2 лет", "Индивидуальные сервисные контракты"].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <FaCheckCircle className="text-red-brand mt-1 shrink-0" />
+                    <span className="text-sm text-gray-600">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { NAV_LINKS, CATALOG_CATEGORIES } from "@/lib/constants";
-import { FaTimes, FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaIndustry, FaFire, FaHome, FaMicrochip } from "react-icons/fa";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -11,11 +10,11 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-  const [catalogOpen, setCatalogOpen] = useState(false);
+  const [catOpen, setCatOpen] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
-      setCatalogOpen(false);
+      setCatOpen(false);
     }
   }, [isOpen]);
 
@@ -32,84 +31,118 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
   if (!isOpen) return null;
 
+  const catalogItems = [
+    { href: "/catalog/industrial", label: "Промышленное газовое оборудование", icon: FaIndustry },
+    { href: "/catalog/boilers", label: "Бытовые котлы", icon: FaFire },
+    { href: "/catalog/smarthome", label: "Системы «Умный дом»", icon: FaHome },
+    { href: "/catalog/kipia", label: "Оборудование КИПиА", icon: FaMicrochip },
+  ];
+
   return (
     <>
       {/* Overlay */}
+      <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />
+
+      {/* Menu panel */}
       <div
-        className="fixed inset-0 bg-black/50 z-40"
-        onClick={onClose}
-      />
+        className="fixed top-0 right-0 h-full w-80 bg-white z-50 shadow-xl transform transition-all duration-300 overflow-y-auto"
+        style={{ animation: "slideIn 0.3s ease-out" }}
+      >
+        <style jsx>{`
+          @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+          }
+        `}</style>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 space-y-1">
+          {/* Close button */}
+          <div className="flex justify-end mb-2">
+            <button
+              onClick={onClose}
+              className="p-2 rounded-lg text-gray-400 hover:bg-gray-100 transition"
+              aria-label="Закрыть меню"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
 
-      {/* Menu */}
-      <div className="fixed top-0 right-0 h-full w-80 bg-white z-50 shadow-xl transform transition-transform duration-300">
-        <div className="flex items-center justify-between p-4 border-b">
-          <span className="text-xl font-bold text-primary">
-            GAS INPEX
-          </span>
-          <button
+          <Link
+            href="/"
             onClick={onClose}
-            className="p-2 text-gray-dark hover:text-accent transition-colors"
-            aria-label="Закрыть меню"
+            className="block px-3 py-2.5 rounded-lg text-sm font-semibold text-navy bg-gray-50"
           >
-            <FaTimes size={24} />
-          </button>
-        </div>
+            Главная
+          </Link>
+          <Link
+            href="/services"
+            onClick={onClose}
+            className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >
+            Услуги
+          </Link>
+          <Link
+            href="/objects"
+            onClick={onClose}
+            className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >
+            Объекты
+          </Link>
+          <Link
+            href="/certificates"
+            onClick={onClose}
+            className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >
+            Сертификаты
+          </Link>
+          <Link
+            href="/partners"
+            onClick={onClose}
+            className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >
+            Партнеры
+          </Link>
 
-        <nav className="p-4">
-          <ul className="space-y-1">
-            {NAV_LINKS.map((link) => {
-              if (link.label === "Каталог") {
-                return (
-                  <li key={link.label}>
-                    <button
-                      onClick={() => setCatalogOpen(!catalogOpen)}
-                      className="w-full flex items-center justify-between px-4 py-3 text-gray-dark hover:text-primary hover:bg-gray-light rounded-lg transition-colors"
-                    >
-                      <span>{link.label}</span>
-                      <FaChevronDown
-                        className={`text-xs transition-transform ${
-                          catalogOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-                    {catalogOpen && (
-                      <ul className="ml-4 mt-1 space-y-1 border-l-2 border-primary/20 pl-3">
-                        {CATALOG_CATEGORIES.map((cat) => (
-                          <li key={cat.slug}>
-                            <Link
-                              href={`/catalog/${cat.slug}`}
-                              onClick={onClose}
-                              className="block px-4 py-2 text-sm text-gray-dark hover:text-primary hover:bg-gray-light rounded-lg transition-colors"
-                            >
-                              {cat.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                );
-              }
-              return (
-                <li key={link.label}>
+          {/* Catalog mobile accordion */}
+          <div>
+            <button
+              onClick={() => setCatOpen(!catOpen)}
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50"
+            >
+              Каталог
+              <FaChevronDown
+                className={`text-xs transition ${catOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+            {catOpen && (
+              <div className="ml-4 mt-1 space-y-1">
+                {catalogItems.map((item) => (
                   <Link
-                    href={link.href}
+                    key={item.href}
+                    href={item.href}
                     onClick={onClose}
-                    className="block px-4 py-3 text-gray-dark hover:text-primary hover:bg-gray-light rounded-lg transition-colors"
+                    className="block px-3 py-2 text-sm text-gray-500 hover:text-red-brand"
                   >
-                    {link.label}
+                    <item.icon className="w-5 inline-block mr-1" />
+                    {item.label}
                   </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                ))}
+              </div>
+            )}
+          </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t">
           <Link
             href="/contacts"
             onClick={onClose}
-            className="block w-full text-center bg-accent text-white px-6 py-3 rounded-lg font-semibold hover:bg-accent-dark transition-colors"
+            className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >
+            Контакты
+          </Link>
+          <Link
+            href="/contacts"
+            onClick={onClose}
+            className="block mt-3 px-5 py-3 bg-red-brand text-white text-sm font-semibold rounded-lg text-center"
           >
             Связаться
           </Link>

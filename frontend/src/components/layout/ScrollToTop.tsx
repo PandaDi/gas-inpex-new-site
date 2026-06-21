@@ -10,7 +10,6 @@ export default function ScrollToTop() {
     const handleScroll = () => {
       setVisible(window.scrollY > 300);
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -22,10 +21,9 @@ export default function ScrollToTop() {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-6 right-6 z-30 p-3 rounded-full bg-accent text-white shadow-lg hover:bg-accent-dark transition-all duration-300 ${
-        visible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-4 pointer-events-none"
+      id="scrollTopBtn"
+      className={`fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-red-brand text-white shadow-lg hover:bg-red-dark transition flex items-center justify-center ${
+        visible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       aria-label="Наверх"
     >
