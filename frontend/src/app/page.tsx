@@ -30,54 +30,69 @@ import {
   FaRobot,
 } from "react-icons/fa";
 
+interface Slide {
+  title: string;
+  subtitle: string;
+  description: string;
+  image: string;
+  button_text: string;
+  button_url: string;
+  order: number;
+}
+
 // ============================================================
 // HERO SLIDER
 // ============================================================
 function HeroSlider() {
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [current, setCurrent] = useState(0);
-  const slides = [
-    {
-      badge: "АСУ ТП",
-      title: "Инжиниринг и Автоматизация",
-      desc: "Проектирование и внедрение систем автоматизации технологических процессов (АСУ ТП) для промышленных объектов любой сложности.",
-      image: "/images/hero-industrial.webp",
-    },
-    {
-      badge: "Оборудование",
-      title: "Поставка газового оборудования",
-      desc: "Широкий ассортимент промышленного и бытового газового оборудования от ведущих мировых производителей.",
-      image: "/images/hero-supply.webp",
-    },
-    {
-      badge: "Smart Home",
-      title: "Проектирование систем Умного дома",
-      desc: "Комплексные решения автоматизации жилых помещений: климат-контроль, освещение, безопасность и мультимедиа.",
-      image: "/images/hero-smarthome.webp",
-    },
-    {
-      badge: "Сервис",
-      title: "Гарантийное и сервисное обслуживание",
-      desc: "Оперативное сервисное обслуживание, ремонт и техническая поддержка всего поставляемого оборудования.",
-      image: "/images/hero-service.webp",
-    },
-  ];
+  const [loading, setLoading] = useState(true);
+
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
+  useEffect(() => {
+    fetch(`${API_BASE.replace(/\/+$/, "")}/hero-slides/`)
+      .then((r) => r.json())
+      .then((data) => {
+        const items = Array.isArray(data) ? data : data.results || [];
+        items.sort((a: Slide, b: Slide) => a.order - b.order);
+        setSlides(items);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const goTo = useCallback((index: number) => {
     setCurrent(index);
   }, []);
 
   const next = useCallback(() => {
+    if (slides.length === 0) return;
     setCurrent((prev) => (prev + 1) % slides.length);
   }, [slides.length]);
 
   const prev = useCallback(() => {
+    if (slides.length === 0) return;
     setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
   }, [slides.length]);
 
   useEffect(() => {
+    if (slides.length <= 1) return;
     const timer = setInterval(next, 6000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, [next, slides.length]);
+
+  if (loading) {
+    return (
+      <section className="relative overflow-hidden bg-navy">
+        <div className="w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[85vh] min-h-[420px] flex items-center justify-center">
+          <div className="text-white/50 text-lg">Загрузка...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (slides.length === 0) return null;
 
   return (
     <section className="relative overflow-hidden bg-navy">
@@ -96,22 +111,28 @@ function HeroSlider() {
             />
             <div className="relative z-20 flex items-center h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-2xl">
-                <span className="inline-block px-4 py-1.5 bg-red-brand text-white text-xs font-semibold uppercase tracking-widest rounded-full mb-4">
-                  {slide.badge}
-                </span>
+                {(slide.subtitle) && (
+                  <span className="inline-block px-4 py-1.5 bg-red-brand text-white text-xs font-semibold uppercase tracking-widest rounded-full mb-4">
+                    {slide.subtitle}
+                  </span>
+                )}
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5">
                   {slide.title}
                 </h1>
-                <p className="text-base sm:text-lg text-gray-300 mb-8 max-w-xl">
-                  {slide.desc}
-                </p>
+                {slide.description && (
+                  <p className="text-base sm:text-lg text-gray-300 mb-8 max-w-xl">
+                    {slide.description}
+                  </p>
+                )}
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <Link
-                    href="/contacts"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-brand text-white font-semibold rounded-lg hover:bg-red-dark transition shadow-xl shadow-red-500/20 text-sm sm:text-base"
-                  >
-                    Получить консультацию <FaArrowRight className="text-sm" />
-                  </Link>
+                  {slide.button_text && (
+                    <Link
+                      href={slide.button_url || "/contacts"}
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-brand text-white font-semibold rounded-lg hover:bg-red-dark transition shadow-xl shadow-red-500/20 text-sm sm:text-base"
+                    >
+                      {slide.button_text} <FaArrowRight className="text-sm" />
+                    </Link>
+                  )}
                   <Link
                     href="/catalog/industrial"
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition border border-white/25 backdrop-blur-sm text-sm sm:text-base"
@@ -138,33 +159,37 @@ function HeroSlider() {
           </div>
         ))}
 
-        {/* Dots */}
-        <div className="absolute bottom-28 left-1/2 -translate-x-1/2 z-30 flex gap-3">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goTo(index)}
-              className={`h-3 rounded-full transition-all duration-300 ${
-                index === current ? "bg-red-brand w-8" : "bg-white/40 w-3 hover:bg-white/70"
-              }`}
-              aria-label={`Слайд ${index + 1}`}
-            />
-          ))}
-        </div>
+        {slides.length > 1 && (
+          <>
+            {/* Dots */}
+            <div className="absolute bottom-28 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goTo(index)}
+                  className={`h-3 rounded-full transition-all duration-300 ${
+                    index === current ? "bg-red-brand w-8" : "bg-white/40 w-3 hover:bg-white/70"
+                  }`}
+                  aria-label={`Слайд ${index + 1}`}
+                />
+              ))}
+            </div>
 
-        {/* Arrows */}
-        <button
-          onClick={prev}
-          className="hero-prev absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition border border-white/20"
-        >
-          <FaChevronLeft className="text-sm sm:text-base" />
-        </button>
-        <button
-          onClick={next}
-          className="hero-next absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition border border-white/20"
-        >
-          <FaChevronRight className="text-sm sm:text-base" />
-        </button>
+            {/* Arrows */}
+            <button
+              onClick={prev}
+              className="hero-prev absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition border border-white/20"
+            >
+              <FaChevronLeft className="text-sm sm:text-base" />
+            </button>
+            <button
+              onClick={next}
+              className="hero-next absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition border border-white/20"
+            >
+              <FaChevronRight className="text-sm sm:text-base" />
+            </button>
+          </>
+        )}
       </div>
     </section>
   );
