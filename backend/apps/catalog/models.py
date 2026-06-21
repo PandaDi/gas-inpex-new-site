@@ -4,9 +4,10 @@
 
 from django.db import models
 from django.utils.text import slugify
+from utils.models import CompressedImageMixin
 
 
-class Category(models.Model):
+class Category(CompressedImageMixin, models.Model):
     """Модель категории продукции."""
     name = models.CharField('Название', max_length=255)
     slug = models.SlugField('Slug', max_length=255, unique=True, blank=True)
@@ -30,7 +31,7 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
 
-class Product(models.Model):
+class Product(CompressedImageMixin, models.Model):
     """Модель продукции/товара."""
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE,

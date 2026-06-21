@@ -16,7 +16,7 @@ class CategoryAdmin(admin.ModelAdmin):
     readonly_fields = ('image_preview', 'created_at')
     fieldsets = (
         ('Основное', {
-            'fields': ('name', 'slug', 'description', 'order', 'is_active')
+            'fields': ('name', 'slug', 'compression', 'description', 'order', 'is_active')
         }),
         ('Изображение', {
             'fields': ('image', 'image_preview')
@@ -46,7 +46,7 @@ class ProductAdmin(admin.ModelAdmin):
     readonly_fields = ('image_preview', 'created_at', 'updated_at')
     fieldsets = (
         ('Основное', {
-            'fields': ('category', 'name', 'slug', 'price', 'order', 'is_active')
+            'fields': ('category', 'name', 'slug', 'compression', 'price', 'order', 'is_active')
         }),
         ('Описание', {
             'fields': ('description', 'characteristics')

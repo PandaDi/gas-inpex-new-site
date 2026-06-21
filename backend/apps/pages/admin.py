@@ -17,7 +17,7 @@ class ServiceAdmin(admin.ModelAdmin):
     readonly_fields = ('image_preview', 'created_at', 'updated_at')
     fieldsets = (
         ('Основное', {
-            'fields': ('title', 'slug', 'icon', 'order', 'is_active')
+            'fields': ('title', 'slug', 'icon', 'compression', 'order', 'is_active')
         }),
         ('Описание', {
             'fields': ('short_description', 'full_description')
@@ -50,7 +50,7 @@ class ProjectAdmin(admin.ModelAdmin):
     readonly_fields = ('image_preview', 'created_at', 'updated_at')
     fieldsets = (
         ('Основное', {
-            'fields': ('title', 'slug', 'client', 'location', 'year', 'order', 'is_active')
+            'fields': ('title', 'slug', 'client', 'location', 'year', 'compression', 'order', 'is_active')
         }),
         ('Описание', {
             'fields': ('short_description', 'full_description')
@@ -81,7 +81,7 @@ class PartnerAdmin(admin.ModelAdmin):
     readonly_fields = ('logo_preview', 'created_at')
     fieldsets = (
         ('Основное', {
-            'fields': ('name', 'website', 'description', 'order', 'is_active')
+            'fields': ('name', 'website', 'compression', 'description', 'order', 'is_active')
         }),
         ('Логотип', {
             'fields': ('logo', 'logo_preview')
@@ -109,7 +109,7 @@ class CertificateAdmin(admin.ModelAdmin):
     readonly_fields = ('image_preview', 'created_at')
     fieldsets = (
         ('Основное', {
-            'fields': ('title', 'issued_by', 'issue_date', 'expiry_date', 'order', 'is_active')
+            'fields': ('title', 'issued_by', 'compression', 'issue_date', 'expiry_date', 'order', 'is_active')
         }),
         ('Файл', {
             'fields': ('file',)
@@ -140,7 +140,7 @@ class HeroSlideAdmin(admin.ModelAdmin):
     readonly_fields = ('image_preview', 'created_at')
     fieldsets = (
         ('Основное', {
-            'fields': ('title', 'subtitle', 'description', 'order', 'is_active')
+            'fields': ('title', 'subtitle', 'description', 'compression', 'order', 'is_active')
         }),
         ('Кнопка', {
             'fields': ('button_text', 'button_url')

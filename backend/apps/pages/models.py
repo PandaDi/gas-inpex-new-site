@@ -4,9 +4,10 @@
 
 from django.db import models
 from django.utils.text import slugify
+from utils.models import CompressedImageMixin
 
 
-class Service(models.Model):
+class Service(CompressedImageMixin, models.Model):
     """Модель услуги компании."""
     title = models.CharField('Название', max_length=255)
     slug = models.SlugField('Slug', max_length=255, unique=True, blank=True)
@@ -33,7 +34,7 @@ class Service(models.Model):
         super().save(*args, **kwargs)
 
 
-class Project(models.Model):
+class Project(CompressedImageMixin, models.Model):
     """Модель реализованного проекта."""
     title = models.CharField('Название', max_length=255)
     slug = models.SlugField('Slug', max_length=255, unique=True, blank=True)
@@ -62,7 +63,7 @@ class Project(models.Model):
         super().save(*args, **kwargs)
 
 
-class Partner(models.Model):
+class Partner(CompressedImageMixin, models.Model):
     """Модель партнёра компании."""
     name = models.CharField('Название', max_length=255)
     logo = models.ImageField('Логотип', upload_to='partners/', blank=True, null=True)
@@ -81,7 +82,7 @@ class Partner(models.Model):
         return self.name
 
 
-class Certificate(models.Model):
+class Certificate(CompressedImageMixin, models.Model):
     """Модель сертификата/лицензии компании."""
     title = models.CharField('Название', max_length=255)
     file = models.FileField('Файл', upload_to='certificates/', blank=True, null=True)
@@ -102,7 +103,7 @@ class Certificate(models.Model):
         return self.title
 
 
-class HeroSlide(models.Model):
+class HeroSlide(CompressedImageMixin, models.Model):
     """Модель слайда для главного баннера (Hero Section)."""
     title = models.CharField('Заголовок', max_length=255)
     subtitle = models.CharField('Подзаголовок', max_length=500, blank=True)
